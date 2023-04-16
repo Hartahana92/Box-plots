@@ -2,11 +2,14 @@ from pathlib import Path
 import yaml
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import telegram
 from telegram.ext import Application,CommandHandler,ContextTypes, MessageHandler, filters
 from telegram import Update, ForceReply
 
 config_path = Path(__file__).parent / "config.yaml"
+tmp_dir = Path(".tmp")
+tmp_dir.mkdir(exist_ok=True)
 with open(config_path) as iof:
     config = yaml.load(iof, Loader=yaml.Loader)
 
@@ -56,10 +59,25 @@ async def file_handler(update, context):
 async def excel_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file_id = update.message.document.file_id
     file = await context.bot.get_file(file_id)
-    df = pd.read_excel(file_path)
-    graphs = create_graphs(df)
-    await update.message.reply_text("File!")
+    df = pd.read_excel(file.file_path)
+    # graphs = create_graphs(df)
 
+    figures = []
+    for col in df.columns[1:]:
+        # Создание боксплота
+        box_plot = go.Box(
+            x=df['Group'],
+            y=df[col],
+            name=col
+        )
+        figures.append(box_plot)
+    fig = go.Figure(figures)
+    dest = tmp_dir / f"{update.message.message_id}.html"
+    fig.write_html(dest)
+    await update.message.reply_document(dest)
+    # with open(dest) as iof:
+    #     await update.message.reply_document(iof)
+    del dest
 
 
 def main() -> None:
