@@ -9,6 +9,7 @@ pandas = "*"
 dash = "*"
 scipy = "*"
 pyyaml = "*"
+python-telegram-bot = "*"
 
 [dev-packages]
 
