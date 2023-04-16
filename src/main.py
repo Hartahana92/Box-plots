@@ -6,12 +6,42 @@ import plotly.graph_objects as go
 import telegram
 from telegram.ext import Application,CommandHandler,ContextTypes, MessageHandler, filters
 from telegram import Update, ForceReply
+from scipy import stats
+from statsmodels.sandbox.stats.multicomp import multipletests
 
 config_path = Path(__file__).parent / "config.yaml"
 tmp_dir = Path(".tmp")
 tmp_dir.mkdir(exist_ok=True)
 with open(config_path) as iof:
     config = yaml.load(iof, Loader=yaml.Loader)
+
+
+def significant_metabolites(data):
+    features = data.drop('Group', axis=1)
+    show=[]
+    col=[]
+    if data['Group'].nunique() > 2:
+        for column in features.columns:
+            values = {group: values.fillna("median").values for group, values in data.groupby(data['Group'])[column]}
+            pvalue=stats.kruskal(*list(values.values()))[1]
+            if pvalue < 0.05:
+                show.append(pvalue)
+                col.append(column)
+        p_adjusted = multipletests(show, alpha=0.05, method='bonferroni')
+        df=pd.DataFrame({'Metabolite':col, 'p-value':show, 'p-value with bonferroni corr':p_adjusted[1]})
+        df=df.sort_values(by='p-value with bonferroni corr')
+    else:
+        data1=data[data['Group']==data['Group'].unique()[0]]
+        data1=data1.fillna(data1.median())
+        data2=data[data['Group']==data['Group'].unique()[1]]
+        data2=data2.fillna(data2.median())
+        pvalue=stats.mannwhitneyu(data1, data2)[1]
+        if pvalue < 0.05:
+            show.append(pvalue)
+            col.append(column)
+        df=pd.DataFrame({'Metabolite':col, 'p-value':show})
+    return df
+
 
 # Функция для создания графиков из таблицы
 def create_graphs(df):
@@ -74,7 +104,10 @@ async def excel_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     fig = go.Figure(figures)
     dest = tmp_dir / f"{update.message.message_id}.html"
     fig.write_html(dest)
+    excel_tmp_path = tmp_dir / f"{update.message.message_id}.xlsx"
+    significant_metabolites(df).to_excel(excel_tmp_path)
     await update.message.reply_document(dest)
+    await update.message.reply_document(excel_tmp_path)
     # with open(dest) as iof:
     #     await update.message.reply_document(iof)
     del dest
