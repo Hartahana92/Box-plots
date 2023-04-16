@@ -2,3 +2,5 @@
 /.idea
 *.yaml
 *.html
+*.xlsx
+**/__pycache__
