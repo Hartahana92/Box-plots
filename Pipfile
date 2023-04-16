@@ -10,6 +10,7 @@ dash = "*"
 scipy = "*"
 pyyaml = "*"
 python-telegram-bot = "*"
+openpyxl = "*"
 
 [dev-packages]
 
