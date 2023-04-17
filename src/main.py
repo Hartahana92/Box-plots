@@ -33,8 +33,10 @@ def significant_metabolites(data):
     else:
         data1=data[data['Group']==data['Group'].unique()[0]]
         data1=data1.fillna(data1.median())
+        data1=data1.drop('Group', axis=1)
         data2=data[data['Group']==data['Group'].unique()[1]]
         data2=data2.fillna(data2.median())
+        data2 = data2.drop('Group', axis=1)
         pvalue=stats.mannwhitneyu(data1, data2)[1]
         if pvalue < 0.05:
             show.append(pvalue)
