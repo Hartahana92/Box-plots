@@ -40,7 +40,7 @@ def significant_metabolites(data):
         data2=data2.fillna(data2.median())
 
         pvalue=stats.mannwhitneyu(data1, data2)[1]
-        if pvalue < 0.05:
+        if pvalue[1] < 0.05:
             show.append(pvalue)
             col.append(column)
         df=pd.DataFrame({'Metabolite':col, 'p-value':show})
