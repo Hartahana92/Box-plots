@@ -31,12 +31,10 @@ def significant_metabolites(data):
         df=pd.DataFrame({'Metabolite':col, 'p-value':show, 'p-value with bonferroni corr':p_adjusted[1]})
         df=df.sort_values(by='p-value with bonferroni corr')
     else:
-        data0=
         for column in features.columns:
             data1=data[data['Group']==data['Group'].unique()[0]][column]
             #data1 = data1.drop('Group', axis=1)
             data1=data1.fillna(data1.median())
-
             data2=data[data['Group']==data['Group'].unique()[1]][column]
             #data2 = data2.drop('Group', axis=1)
             data2=data2.fillna(data2.median())
