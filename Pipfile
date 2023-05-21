@@ -12,6 +12,7 @@ python-telegram-bot = "*"
 scipy = "*"
 statsmodels = "*"
 openpyxl = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
