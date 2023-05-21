@@ -11,6 +11,7 @@ pyyaml = "*"
 python-telegram-bot = "*"
 scipy = "*"
 statsmodels = "*"
+openpyxl = "*"
 
 [dev-packages]
 
