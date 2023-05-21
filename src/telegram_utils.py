@@ -66,6 +66,6 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         with open(dest, 'rb') as iof:
             await query.message.reply_document(iof)
     elif query.data == 'group_comparison':
-
+        pass
     mes = "success"
     await query.answer(text=mes)
