@@ -13,6 +13,7 @@ scipy = "*"
 statsmodels = "*"
 openpyxl = "*"
 sqlalchemy = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
