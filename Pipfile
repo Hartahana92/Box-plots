@@ -7,6 +7,10 @@ name = "pypi"
 plotly = "*"
 pandas = "*"
 dash = "*"
+pyyaml = "*"
+python-telegram-bot = "*"
+scipy = "*"
+statsmodels = "*"
 
 [dev-packages]
 

@@ -1,2 +1,6 @@
 /figures.html
 /.idea
+*.yaml
+*.html
+*.xlsx
+**/__pycache__
