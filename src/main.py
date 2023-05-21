@@ -1,13 +1,14 @@
 from pathlib import Path
-import yaml
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import telegram
-from telegram.ext import Application,CommandHandler,ContextTypes, MessageHandler, filters
-from telegram import Update, ForceReply
+import yaml
 from scipy import stats
 from statsmodels.sandbox.stats.multicomp import multipletests
+from telegram import Update, ForceReply
+from telegram.ext import Application, CommandHandler, ContextTypes, \
+    MessageHandler, filters
 
 config_path = Path(__file__).parent / "config.yaml"
 tmp_dir = Path(".tmp")
