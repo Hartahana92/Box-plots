@@ -1,0 +1,23 @@
+# compouse for launch the project with postgresql db
+version: '3.5'
+
+# voluems for postgresql
+volumes:
+  postgres_data: {}
+
+services:
+  postgres:
+    container_name: postgres_fima
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=FoolishPassword
+      - POSTGRES_USER=postgreuser
+      - POSTGRES_DB=matabolomic
+
+  box_bot:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: box_bot
